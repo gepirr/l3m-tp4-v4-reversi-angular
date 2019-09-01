@@ -7,17 +7,18 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class ReversiService implements ReversiModelInterface {
   private board: Board;
-  private boardSubj = new BehaviorSubject<ReversiModelInterface>(this);
-  private boardObs = this.boardSubj.asObservable();
+  private subject = new BehaviorSubject<ReversiModelInterface>(this);
+  readonly obs = this.subject.asObservable();
   currentTurn: Turn;
 
   constructor() {
     this.initBoard();
   }
 
-  getBoardObs() {
-    return this.boardObs;
+  getObservable() {
+    return this.obs;
   }
+
   getBoard() {
     return this.board;
   }
@@ -55,16 +56,17 @@ export class ReversiService implements ReversiModelInterface {
       L.forEach(({ x, y }) => this.board[x][y] = this.turn());
       this.currentTurn = this.turn() === C.Player1 ? C.Player2 : C.Player1;
       if (this.skipTurn()) {
+        console.log('Skip turn');
         this.currentTurn = this.turn() === C.Player1 ? C.Player2 : C.Player1;
       }
-      this.boardSubj.next(this);
+      this.subject.next(this);
     }
   }
 
-  private  skipTurn() {
+  private skipTurn(): boolean {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (this.canPlay(i, j)) {
+        if (this.canPlay(i, j).length > 0) {
           return false;
         }
       }

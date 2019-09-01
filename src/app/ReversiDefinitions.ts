@@ -17,7 +17,7 @@ export interface ReversiModelInterface {
   canPlay(x: number, y: number): PlayImpact;
   turn(): Turn;
   play(i: number, j: number): void;
-  getBoardObs(): Observable<ReversiModelInterface>;
+  getObservable(): Observable<ReversiModelInterface>;
 }
 
 export interface TileCoords {
