@@ -14,8 +14,8 @@ export type PlayImpact = TileCoords[];
 
 export interface ReversiModelInterface {
   getBoard(): Board;
-  canPlay(x: number, y: number): PlayImpact;
-  turn(): Turn;
+  PionsTakenIfPlayAt(x: number, y: number): PlayImpact; // Les pions pris à l'adversaire
+  turn(): Turn;                                         // Le joueur courant
   play(i: number, j: number): void;
   getObservable(): Observable<ReversiModelInterface>;
 }

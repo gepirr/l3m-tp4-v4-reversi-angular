@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Board, C, ReversiModelInterface, Turn} from './ReversiDefinitions';
+import {Board, C, ReversiModelInterface, TileCoords, Turn} from './ReversiDefinitions';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
@@ -23,25 +23,32 @@ export class ReversiService implements ReversiModelInterface {
     return this.board;
   }
 
-  canPlay(x, y) {
+  PionsTakenIfPlayAt(x, y): TileCoords[] {
     if (this.board[x][y] === C.Empty) {
-      const otherTile = this.turn() === C.Player1 ? C.Player2 : C.Player1;
-      const tilesToFlip = [];
-      [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]].forEach(([dx, dy]) => {
-        let posX = x;
-        let posY = y;
-        const L = [];
+      const otherTile = this.turn() === C.Player1 ? C.Player2 : C.Player1 ;
+      const tilesToFlip: TileCoords[] = [];
+      // Parcourir les 8 directions à partir de la case x, y
+      const D = [ [1, 0], [1, 1], [1, -1], [0, 1], [0, -1], [-1, 1], [-1, 0], [-1, -1] ];
+      D.forEach( ([dx, dy]) => {
+        // S'arréter dès qu'on est au bord du plateau ou que la case n'est pas otherTile
+        let px = x;
+        let py = y;
+        const L: TileCoords[] = [];
         do {
-          posX += dx;
-          posY += dy;
-          L.push({ x: posX, y: posY });
-        } while (posX >= 0 && posY >= 0 && posX < 8 && posY < 8 && this.board[posX][posY] === otherTile);
-        if (posX >= 0 && posY >= 0 && posX < 8 && posY < 8
-          && this.board[posX][posY] === this.turn()
-          && (Math.abs(posX - x) >= 2 || Math.abs(posY - y) >= 2)) {
-          tilesToFlip.push(...L);
+          px += dx; py += dy;
+          if (this.board[px] && this.board[px][py] !== undefined) { // Est ce que je suis toujours sur le plateau ?
+            L.push({x: px, y: py});
+          } else {
+            break;
+          }
+        } while (this.board[px][py] === otherTile);
+
+        if (this.board[px] && this.board[px][py] === this.turn()) {
+          L.pop(); // J'enlève le dernier pion, celui qui a déclanché l'arrêt de parcours
+          tilesToFlip.push( ...L );
         }
       });
+
       return tilesToFlip;
     }
     return [];
@@ -50,7 +57,7 @@ export class ReversiService implements ReversiModelInterface {
     return this.currentTurn;
   }
   play(i, j) {
-    const L = this.canPlay(i, j);
+    const L = this.PionsTakenIfPlayAt(i, j);
     if (L.length) {
       this.board[i][j] = this.turn();
       L.forEach(({ x, y }) => this.board[x][y] = this.turn());
@@ -66,7 +73,7 @@ export class ReversiService implements ReversiModelInterface {
   private skipTurn(): boolean {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 8; j++) {
-        if (this.canPlay(i, j).length > 0) {
+        if (this.PionsTakenIfPlayAt(i, j).length > 0) {
           return false;
         }
       }

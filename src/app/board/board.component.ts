@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ReversiService} from '../reversi.service';
 
 @Component({
   selector: 'app-board',
@@ -8,7 +9,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private rs: ReversiService) { }
 
   ngOnInit() {
   }

@@ -3,7 +3,9 @@ div.Player1, div.Player2 {
   height: 30px;
   border: solid black 1px;
   border-radius: 50%;
+  transition: background-color 1s;
 }
 div.Player2 {
   background: black;
+  transition: background-color 1s;
 }
