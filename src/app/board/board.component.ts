@@ -7,7 +7,8 @@ import {Observable} from 'rxjs';
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ReversiService]
 })
 export class BoardComponent implements OnInit {
 

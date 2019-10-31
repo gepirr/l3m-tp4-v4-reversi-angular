@@ -7,6 +7,7 @@ import { PionComponent } from './pion/pion.component';
 import {ReversiService} from './reversi.service';
 import { CommentateurComponent } from './commentateur/commentateur.component';
 import { IaComponent } from './ia/ia.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { IaComponent } from './ia/ia.component';
     IaComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [ReversiService],
   bootstrap: [AppComponent]
