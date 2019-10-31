@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Board, C, ReversiModelInterface, TileCoords, Turn} from './ReversiDefinitions';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class ReversiService implements ReversiModelInterface {
     this.initBoard();
   }
 
-  getObservable() {
+  getObservable(): Observable<ReversiModelInterface> {
     return this.obs;
   }
 
