@@ -1,0 +1,11 @@
+<section *ngIf="observableReversi | async">
+  <section>
+    Au tour du joueur {{turn}}
+    <app-pion [player]="turn"></app-pion>
+  </section>
+  <section *ngFor="let player of players">
+    Score joueur {{player}}:
+    {{getScore(player)}}
+    <app-pion [player]="player"></app-pion>
+  </section>
+</section>
